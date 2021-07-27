@@ -1,8 +1,7 @@
 <?php
 
-use App\Models\Administrador;
-use App\Models\Persona;
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,9 +12,13 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
 Route::get('/', function () {
     return view('auth.login');
 });
+Route::get('/create',[\App\Http\Controllers\clienteController::class,'create'])->name('clientes.create');
+Route::post('/',[\App\Http\Controllers\clienteController::class,'store'])->name('clientes.store');
 
 Auth::routes();
 Route::get('logout',[\App\Http\Controllers\Auth\LoginController::class,'logout'])->name('logout');
@@ -32,11 +35,51 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/{id}/edit', [\App\Http\Controllers\UsuarioController::class, 'edit'])->name('usuarios.edit');
         Route::get('/{id}/destroy', [\App\Http\Controllers\UsuarioController::class,'destroy'])->name('usuarios.destroy');
     });
+    Route::group(['prefix' => 'alimentos'], function () {
+        Route::get('/', [\App\Http\Controllers\alimentocontroller::class, 'index'])->name('alimentos.index');
+        Route::post('/', [\App\Http\Controllers\alimentocontroller::class,'store'])->name('alimentos.store');
+        Route::get('/create', [\App\Http\Controllers\alimentocontroller::class, 'create'])->name('alimentos.create');
+        Route::get('/{id}', [\App\Http\Controllers\alimentocontroller::class, 'show'])->name('alimentos.show');
+        Route::put('/{id}', [\App\Http\Controllers\alimentocontroller::class,'update'])->name('alimentos.update');
+        Route::get('/{id}/edit', [\App\Http\Controllers\alimentocontroller::class, 'edit'])->name('alimentos.edit');
+        Route::get('/{id}/destroy', [\App\Http\Controllers\alimentocontroller::class,'destroy'])->name('alimentos.destroy');
+    });
+    Route::group(['prefix' => 'menus'], function () {
+        Route::get('/', [\App\Http\Controllers\menucontroller::class, 'index'])->name('menus.index');
+        Route::post('/', [\App\Http\Controllers\menucontroller::class,'store'])->name('menus.store');
+        Route::get('/create', [\App\Http\Controllers\menucontroller::class, 'create'])->name('menus.create');
+        Route::get('/{id}', [\App\Http\Controllers\menucontroller::class, 'show'])->name('menus.show');
+        Route::put('/{id}', [\App\Http\Controllers\menucontroller::class,'update'])->name('menus.update');
+        Route::get('/{id}/edit', [\App\Http\Controllers\menucontroller::class, 'edit'])->name('menus.edit');
+        Route::get('/{id}/destroy', [\App\Http\Controllers\menucontroller::class,'destroy'])->name('menus.destroy');
+    });
+    Route::group(['prefix' => 'bitacoras'], function () {
+        Route::get('/', [\App\Http\Controllers\bitacoracontroller::class, 'index'])->name('bitacoras.index');
+          });
+    Route::group(['prefix' => 'alimentomenus'], function () {
+        Route::get('/', [\App\Http\Controllers\alimento_menu_controller::class, 'index'])->name('alimentomenus.index');
+        Route::post('/', [\App\Http\Controllers\alimento_menu_controller::class,'store'])->name('alimentomenus.store');
+        Route::get('/create', [\App\Http\Controllers\alimento_menu_controller::class, 'create'])->name('alimentomenus.create');
+        Route::get('/{id}', [\App\Http\Controllers\alimento_menu_controller::class, 'show'])->name('alimentomenus.show');
+        Route::put('/{id}', [\App\Http\Controllers\alimento_menu_controller::class,'update'])->name('alimentomenus.update');
+        Route::get('/{id}/edit', [\App\Http\Controllers\alimento_menu_controller::class, 'edit'])->name('alimentomenus.edit');
+        Route::get('/{id}/destroy', [\App\Http\Controllers\alimento_menu_controller::class,'destroy'])->name('alimentomenus.destroy');
+    });
+
+    Route::group(['prefix' => 'pedidos'], function () {
+        Route::get('/', [\App\Http\Controllers\pedidocontroller::class, 'index'])->name('pedidos.index');
+        Route::post('/', [\App\Http\Controllers\pedidocontroller::class,'store'])->name('pedidos.store');
+        Route::get('/create', [\App\Http\Controllers\pedidocontroller::class, 'create'])->name('pedidos.create');
+        Route::get('/{id}', [\App\Http\Controllers\pedidocontroller::class, 'show'])->name('pedidos.show');
+        Route::put('/{id}', [\App\Http\Controllers\pedidocontroller::class,'update'])->name('pedidos.update');
+        Route::get('/{id}/edit', [\App\Http\Controllers\pedidocontroller::class, 'edit'])->name('pedidos.edit');
+        Route::get('/{id}/destroy', [\App\Http\Controllers\pedidocontroller::class,'destroy'])->name('pedidos.destroy');
+    });
+
 
     Route::group(['prefix' => 'clientes'], function () {
        Route::get('/',[\App\Http\Controllers\clienteController::class,'index'])->name('clientes.index');
-       Route::post('/',[\App\Http\Controllers\clienteController::class,'store'])->name('clientes.store');
-       Route::get('/create',[\App\Http\Controllers\clienteController::class,'create'])->name('clientes.create');
+
        Route::get('/{id}',[\App\Http\Controllers\clienteController::class,'show'])->name('clientes.show');
        Route::put('/{id}',[\App\Http\Controllers\clienteController::class,'update'])->name('clientes.update');
        Route::get('/{id}/edit',[\App\Http\Controllers\clienteController::class,'edit'])->name('clientes.edit');
@@ -63,21 +106,13 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/{id}',[\App\Http\Controllers\AdministradorController::class,'show'])->name('administradores.show');
         Route::put('/{id}',[\App\Http\Controllers\AdministradorController::class,'update'])->name('administradores.update');
         Route::get('/{id}/edit',[\App\Http\Controllers\AdministradorController::class,'edit'])->name('administradores.edit');
-        Route::get('{id}/destroy',[\App\Http\Controllers\Administradortroller::class,'destroy'])->name('administradores.destroy');
+        Route::get('{id}/destroy',[\App\Http\Controllers\AdministradorController::class,'destroy'])->name('administradores.destroy');
     });
-    Route::group(['prefix' => 'productos'], function () {
-        Route::get('/',[\App\Http\Controllers\productocontroller::class,'index'])->name('productos.index');
-        Route::post('/',[\App\Http\Controllers\productocontroller::class,'store'])->name('productos.store');
-        Route::get('/create',[\App\Http\Controllers\productocontroller::class,'create'])->name('productos.create');
-        Route::get('/{id}',[\App\Http\Controllers\productocontroller::class,'show'])->name('productos.show');
-        Route::put('/{id}',[\App\Http\Controllers\productocontroller::class,'update'])->name('productos.update');
-        Route::get('/{id}/edit',[\App\Http\Controllers\productocontroller::class,'edit'])->name('productos.edit');
-        Route::get('{id}/destroy',[\App\Http\Controllers\productocontroller::class,'destroy'])->name('productos.destroy');
-    });
+
     Route::group(['prefix' => 'reservas'], function () {
         Route::get('/',[\App\Http\Controllers\reservaController::class,'index'])->name('reservas.index');
-        Route::post('/',[\App\Http\Controllers\reservaController::class,'store'])->name('reservas.store');
-        Route::get('/create',[\App\Http\Controllers\reservaController::class,'create'])->name('reservas.create');
+        Route::post('/{id}',[\App\Http\Controllers\reservaController::class,'store'])->name('reservas.store');
+        Route::get('/create/{id}',[\App\Http\Controllers\reservaController::class,'create'])->name('reservas.create');
         Route::get('/{id}',[\App\Http\Controllers\reservaController::class,'show'])->name('reservas.show');
         Route::put('/{id}',[\App\Http\Controllers\reservaController::class,'update'])->name('reservas.update');
         Route::get('/{id}/edit',[\App\Http\Controllers\reservaController::class,'edit'])->name('reservas.edit');
@@ -86,9 +121,7 @@ Route::middleware(['auth'])->group(function() {
 
     Route::resource('roles',\App\Http\Controllers\rolecontroller::class)->names('roles');
 
-    Route::group(['prefix' => 'galerias'], function () {
-        Route::get('/',[\App\Http\Controllers\galeriacontroller::class,'index'])->name('galerias.index');
-        });
+
 
 
 

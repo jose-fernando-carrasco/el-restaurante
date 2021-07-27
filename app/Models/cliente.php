@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class cliente extends Model
 {
+    use HasFactory;
     protected $table='clientes';
 
     protected $fillable=['carnet_identidad','persona_id'];
@@ -14,4 +15,5 @@ class cliente extends Model
     public function persona(){
         $this->belongsTo(Persona::class,'persona_id');
     }
+
 }

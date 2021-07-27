@@ -4,23 +4,18 @@
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.min.js"></script>
 
-<script src = "lib / jquery-2.0.3.js"> </script>
-<script src = "src / js / jquery.swipebox.js"> </script>
+
 
 
 <script>
     $(document).ready(function() {
+    $('#bitacora').DataTable();
+    $('#reserva').DataTable();
+    $('productos').DataTable();
+    $('#usuario').DataTable();
     $('#example').DataTable();
 } );
-$(document).ready(function() {
-    $('#reserva').DataTable();
-} );
-$(document).ready(function() {
-    $('#productos').DataTable();
-} );
-$(document).ready(function() {
-    $('#usuario').DataTable();
-} );
+
     document.addEventListener('DOMContentLoaded', function() {
         var elems = document.querySelectorAll('.sidenav');
         M.Sidenav.init(elems, {});
@@ -42,5 +37,8 @@ $(document).ready(function() {
         });
         var instance = M.Modal.getInstance(elem);
         instance.open();
-    }
+}
+
+}
+
 </script>

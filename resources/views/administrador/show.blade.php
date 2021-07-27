@@ -31,16 +31,7 @@
                             <span style="color:red">{{ $message }} </span>
                             @enderror
                         </div>
-                        <div class="form-group row">
-                            <label class="col-lg-3 col-form-label form-control-label">Correo administrador</label>
-                            <div class="col-lg-9">
-                                <input class="form-control" id="Correo" type="email" class="validate" name="Correo" value="{{$persona->correo}}" required>
-                            </div>
-                            <br>
-                            @error('Correo')
-                            <span style="color:red">{{ $message }} </span>
-                            @enderror
-                        </div>
+                    
                         <div class="form-group row">
                             <label class="col-lg-3 col-form-label form-control-label">fecha nacimiento administrador</label>
                             <div class="col-lg-9">

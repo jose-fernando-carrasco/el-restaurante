@@ -32,7 +32,7 @@
                         <th>Nombre</th>
                         <th>apellido</th>
 
-                        <th>Correo</th>
+       
                         <th>Fecha de nacimiento</th>
 
                         <th>Carnet identidad</th>
@@ -50,7 +50,7 @@
                                 <td>{{ $persona->nombre }}</td>
                                 <td>{{ $persona->apellido }}</td>
 
-                                <td>{{ $persona->correo }}</td>
+
                                 <td>{{ $persona->fecha_nacimiento }}</td>
 
                                 <td>{{ $persona->cajero->carnet_identidad }}</td>

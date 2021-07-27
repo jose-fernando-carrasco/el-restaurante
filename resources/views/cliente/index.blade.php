@@ -20,9 +20,6 @@
          <!-- /.card-header -->
             <div class="card-body table-responsive">
 
-                <a class="btn btn-primary"  href="{{ route('clientes.create') }}" role="button">
-                    REGISTRAR
-                  </a>
                 <br>
                 <table id="reserva" class="table table-striped" style="width:100%">
                     <thead>
@@ -32,7 +29,7 @@
                         <th>Nombre</th>
                         <th>apellido</th>
 
-                        <th>Correo</th>
+
                         <th>Fecha de nacimiento</th>
 
                         <th>Carnet identidad</th>
@@ -50,7 +47,7 @@
                                 <td>{{ $persona->nombre }}</td>
                                 <td>{{ $persona->apellido }}</td>
 
-                                <td>{{ $persona->correo }}</td>
+
                                 <td>{{ $persona->fecha_nacimiento }}</td>
 
                                 <td>{{ $persona->cliente->carnet_identidad }}</td>

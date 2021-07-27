@@ -1,18 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\restaurant;
-use App\Models\regreserva;
+
 use Illuminate\Http\Request;
+use App\Models\persona;
 use App\Models\reserva;
-use App\Models\Persona;
-use DateTime;
-use RealRashid\SweetAlert\Facades\Alert;
-
-
-
-
-class reservaController extends Controller
+use App\Models\bitacora;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
+use App\Models\restaurant;
+class reservacontroller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,27 +18,39 @@ class reservaController extends Controller
      */
     public function index()
     {
+        //////////bitacora////////
+$id=auth()->user()->persona_id;
+$persona=persona::findOrFail($id);
+$bitacora=new bitacora();
+$bitacora->usuario=$persona->nombre;
+$bitacora->tabla='index de reserva';
+$bitacora->descripcion='el usuario'. $persona->nombre.'ingreso a las '.date("Y-m-d H:i:s");;
+$bitacora->user_id=auth()->user()->id;
+$bitacora->save();
+////////////////
+        if (Auth::user()->hasRole('cliente')){
         $cliente=auth()->user()->id;
+        $persona=persona::findOrFail($cliente);
+        $reserva=reserva::all()->where('persona_id','=',$cliente);
 
-       $persona=persona::findOrFail($cliente);
-       $persona->cliente;
-      
+        return view('reserva.index',['reservas'=>$reserva],['personas'=>$persona]);
+        }
         $reserva=reserva::all();
         return view('reserva.index',['reservas'=>$reserva]);
-    }
 
+    }
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($persona)
     {
         //
+        $personas=persona::findOrFail($persona);
 
-
-        return view('reserva.create');
+        return view('reserva.create',['personas'=>$personas]);
     }
 
     /**
@@ -50,8 +59,10 @@ class reservaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
+        $personas=persona::findOrFail($id);
+
         $current_day = date("N");
 $days_to_friday = 5 - $current_day;
 $days_from_monday = $current_day - 1;
@@ -66,6 +77,17 @@ $friday = date("Y-m-d", strtotime("+ {$days_to_friday} Days"));
           'cantidad'=>'required',
          ]);
         ///verificacion
+
+                //////////bitacora////////
+$id=auth()->user()->persona_id;
+$persona=persona::findOrFail($id);
+$bitacora=new bitacora();
+$bitacora->usuario=$persona->nombre;
+$bitacora->tabla='crear de reserva';
+$bitacora->descripcion='el usuario'. $persona->nombre.'ingreso a las '.date("Y-m-d H:i:s");;
+$bitacora->user_id=auth()->user()->id;
+$bitacora->save();
+////////////////
          $veri=$this->verificar_espacio($request->input('fecha'),$request->input('cantidad'));
          $espacio=$this->espacio_disponible($request->input('fecha'));
 
@@ -74,6 +96,7 @@ $friday = date("Y-m-d", strtotime("+ {$days_to_friday} Days"));
         $reserva->fecha=$request->input('fecha');
         $reserva->hora=$request->input('hora');
          $reserva->cantidad=$request->input('cantidad');
+         $reserva->persona_id=$id;
          $reserva->save();
          return redirect()->route('reservas.index');
          }
@@ -137,7 +160,16 @@ $friday = date("Y-m-d", strtotime("+ {$days_to_friday} Days"));
     {
         //
 
-
+        //////////bitacora////////
+        $id=auth()->user()->persona_id;
+        $persona=persona::findOrFail($id);
+        $bitacora=new bitacora();
+        $bitacora->usuario=$persona->nombre;
+        $bitacora->tabla='show de reserva';
+        $bitacora->descripcion='el usuario'. $persona->nombre.'ingreso a las '.date("Y-m-d H:i:s");;
+        $bitacora->user_id=auth()->user()->id;
+        $bitacora->save();
+        ////////////////
 
         $reserva=reserva::findOrFail($id);
 
@@ -175,6 +207,17 @@ $friday = date("Y-m-d", strtotime("+ {$days_to_friday} Days"));
             'cantidad'=>'required',
            ]);
            //////////////
+
+                   //////////bitacora////////
+$id=auth()->user()->persona_id;
+$persona=persona::findOrFail($id);
+$bitacora=new bitacora();
+$bitacora->usuario=$persona->nombre;
+$bitacora->tabla='edit de reserva';
+$bitacora->descripcion='el usuario'. $persona->nombre.'ingreso a las '.date("Y-m-d H:i:s");;
+$bitacora->user_id=auth()->user()->id;
+$bitacora->save();
+////////////////
         $reserva=reserva::findOrFail($id);
 
         $reserva->fecha=$request->input('fecha');

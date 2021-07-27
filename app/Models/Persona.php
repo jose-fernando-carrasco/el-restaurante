@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Persona extends Model
+class persona extends Model
 {
+    use HasFactory;
+
     protected $table='personas';
 
     protected $fillable=['nombre','apellido','correo','fecha_nacimiento','direccion'];
@@ -29,5 +31,8 @@ class Persona extends Model
     public function administrador()
     {
         return $this->hasOne(Administrador::class,'persona_id');
+    }
+    public function reserva(){
+        return $this->belongsTo(reserva::class);
     }
 }

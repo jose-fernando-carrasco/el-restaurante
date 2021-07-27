@@ -52,8 +52,9 @@
                                 <br><br>
                                 <div>
                                     <input class="btn btn-primary" value="Iniciar Sesión" type="submit" onclick="showProgress()">
+                                    <a href="{{route('clientes.create')}}" class="btn btn-sm btn-primary">registrarse</a>
                                 </div>
-
+                                
                             </form>
                         </div>
                     </div>

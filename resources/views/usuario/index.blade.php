@@ -17,10 +17,13 @@
           <h5>Listado de usuarios</h5>
 
         </div>
+        <div class="col s4">
+            <a href="{{ route('usuarios.create') }}" class="waves-effect waves-light btn dark-primary-color">Registrar</a>
+        </div>
          <!-- /.card-header -->
             <div class="card-body table-responsive">
 
-               
+
                 <br>
                 <table id="reserva" class="table table-striped" style="width:100%">
                     <thead>
@@ -29,28 +32,27 @@
                             <th>ID</th>
                             <th>Nombre</th>
                             <th>apellido</th>
-
+                            <th>imagen</th>
                             <th>Correo</th>
                             <th>Fecha de nacimiento</th>
-
-
-
-                            <th>UserId</th>
+                          
                             <th>UserName</th>
                             <th>Acciones</th>
 
                         </tr>
                     </thead>
                     @foreach($personas as $persona)
+
                             <tr>
                                 <td>{{ $persona->id }}</td>
                                 <td>{{ $persona->nombre }}</td>
                                 <td>{{ $persona->apellido }}</td>
+                                <td> <img src="{{asset($persona->user->imagen)}}" width="100px" height="100px"> </td>
 
-                                <td>{{ $persona->correo }}</td>
+                                <td>{{ $persona->user->email }}</td>
                                 <td>{{ $persona->fecha_nacimiento }}</td>
 
-                                <td>{{ $persona->user->id }}</td>
+
                                 <td>{{ $persona->user->name }}</td>
 
 
@@ -72,6 +74,7 @@
                                 </td>
 
                             </tr>
+
                         @endforeach
                     </tbody>
                 </table>

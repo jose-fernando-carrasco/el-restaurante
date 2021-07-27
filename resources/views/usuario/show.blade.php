@@ -1,66 +1,60 @@
 @extends('layouts.app')
 @section('content')
-
+<div class="container py-3">
     <div class="row">
-        <div class="col s12 m10 offset-m1 l6 offset-l3 xl6 offset-xl3">
-            <div id="panel-left"  class="card">
-                <div class="card-content">
-                    <span class="card-title primary-text-color primary-text-style">
-                            Datos Personales
-                            </span>
 
-                    <div class="row">
-                        <div class="col s12 divider"></div>
-                    </div>
 
-                    <div class="row">
+        <div class="mx-auto col-sm-6">
+            <!-- form user info -->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Datos Del Usuario</h4>
+                </div>
+                <div class="card-body">
 
-                        <div class="col s12 m5">
-                            <p class="primary-text-color secondary-text-style">Nombre Completo:</p>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">Username</label>
+                            <div class="col-lg-9">
+                                <input class="form-control" id="nombre" type="text" class="validate" name="nombre" value="{{$persona->user->name}}" required>
+                            </div>
+                            <br>
+                            @error('nombre')
+                            <span style="color:red">{{ $message }} </span>
+                            @enderror
                         </div>
-                        <div class="col s8 offset-s2 m7">
-                            <p class="secondary-text-color">{{$persona->nombre}}</p>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">correo</label>
+                            <div class="col-lg-9">
+                                <input class="form-control" id="correo" type="email" class="validate" name="correo" value="{{$persona->user->email}}" required>
+                            </div>
+                            <br>
+                            @error('correo')
+                            <span style="color:red">{{ $message }} </span>
+                            @enderror
                         </div>
-
-                        <div class="col s12 m5">
-                            <p class="primary-text-color secondary-text-style">Apellido:</p>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">imagen del usuario</label>
+                            <div class="col-lg-9">
+                                <img  id="imagen" src="{{asset($persona->user->imagen)}}" width="100px" height="150px">
+                            </div>
+                            <br>
+                            @error('imagen')
+                            <span style="color:red">{{ $message }} </span>
+                            @enderror
                         </div>
-                        <div class="col s8 offset-s2 m7">
-                            <p class="secondary-text-color">{{$persona->apellido}}</p>
-                        </div>
-
-
-                        <div class="col s12 m5">
-                            <p class="primary-text-color secondary-text-style">Correo:</p>
-                        </div>
-                        <div class="col s8 offset-s2 m7">
-                            <p class="secondary-text-color">{{$persona->correo}}</p>
-                        </div>
-
-                        <div class="col s12 m5">
-                            <p class="primary-text-color secondary-text-style">Fecha de Nacimiento:</p>
-                        </div>
-                        <div class="col s8 offset-s2 m7">
-                            <p class="secondary-text-color">{{$persona->fecha_nacimiento}}</p>
-                        </div>
+                        <br>
 
 
-                       
-
-                        <div class="col s12 m5">
-                            <p class="primary-text-color secondary-text-style">Drirección:</p>
-                        </div>
-                        <div class="col s8 offset-s2 m7">
-                            <p class="secondary-text-color">{{$persona->direccion}}</p>
-                        </div>
 
 
-                    </div>
-                    <div class="card-action right-align">
-                        <a href="{{ route('usuarios.index') }}" class="waves-effect waves-brown btn-flat red-text bold">Atras</a>
-                    </div>
+
+
+                    <a href="{{ route('usuarios.index') }}" class="btn btn-primary">Atras</a>
+
                 </div>
             </div>
+            <!-- /form user info -->
         </div>
     </div>
+</div>
 @endsection

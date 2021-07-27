@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UsuarioRequest;
+
 use App\Models\Persona;
 use App\Models\User;
+use App\Models\bitacora;
+use Spatie\Permission\Models\Role;
+use App\Models\cajero;
+use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Http\Request;
 
@@ -18,11 +22,24 @@ class UsuarioController extends Controller
     public function index()
     {
 
-
+              //////////bitacora////////
+              $id=auth()->user()->persona_id;
+              $persona=persona::findOrFail($id);
+              $bitacora=new bitacora();
+              $bitacora->usuario=$persona->nombre;
+              $bitacora->tabla='index de user';
+              $bitacora->descripcion='el usuario'. $persona->nombre.'ingreso a las '.date("Y-m-d H:i:s");;
+              $bitacora->user_id=auth()->user()->id;
+              $bitacora->save();
+              ////////////////
         $users_id=User::all('persona_id');
+        $user=User::all('id');
         $personas=Persona::with('user')->whereIn('id',$users_id)->get();
 
-        return view('usuario.index',['personas'=>$personas]);
+        $roles=Role::with('users')->whereIn('id',$user)->get();
+
+
+        return view('usuario.index',['personas'=>$personas],['roles'=>$roles]);
     }
 
     /**
@@ -32,7 +49,11 @@ class UsuarioController extends Controller
      */
     public function create()
     {
-        return view('usuario.create');
+        $roles=Role::pluck('name', 'id');
+        $user=User::all('persona_id');
+        $cajeros=cajero::all('persona_id');
+        $cajeros_id=persona::whereIn('id',$cajeros)->whereNotIn('id',$user)->get();
+         return view('usuario.create',['roles'=>$roles],['cajeros'=>$cajeros_id]);
     }
 
     /**
@@ -41,29 +62,44 @@ class UsuarioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UsuarioRequest $request)
+    public function store(Request $request)
     {
-        $persona=new Persona();
-        $persona->nombre=$request->input('nombre');
-        $persona->paterno=$request->input('paterno');
-        $persona->materno=$request->input('materno');
-        $persona->telefono=$request->input('telefono');
-        $persona->correo=$request->input('correo');
-        $persona->fecha_nacimiento=$request->input('fecha_nacimiento');
-        $persona->estado_civil=$request->input('estado_civil');
-        $persona->sexo=$request->input('sexo');
-        $persona->carnet_identidad=$request->input('carnet_identidad');
-        $persona->direccion=$request->input('direccion');
-        $persona->save();
 
-        $user=new User();
-        $user->name=$request->input('nombre');
-        $user->email=$request->input('correo');
-        $user->password=bcrypt($request->input('contraseña'));
-        $user->persona_id=$persona->id;
-        $user->save();
+        $request->validate([
 
-        return redirect()->route('usuarios.index');
+            'Correo'=>'required',
+            'nombre'=>'required',
+            'contraseña'=>'required'
+
+           ]);
+   //////////bitacora////////
+   $id=auth()->user()->persona_id;
+   $persona=persona::findOrFail($id);
+   $bitacora=new bitacora();
+   $bitacora->usuario=$persona->nombre;
+   $bitacora->tabla='crear de user';
+   $bitacora->descripcion='el usuario'. $persona->nombre.'ingreso a las '.date("Y-m-d H:i:s");;
+   $bitacora->user_id=auth()->user()->id;
+   $bitacora->save();
+   ////////////////
+           $user=new User();
+           $user->name=$request->nombre;
+           $user->email=$request->Correo;
+           $user->password=bcrypt($request->input('contraseña'));
+           if($request->hasFile('imagen')) {
+            $imagen=$request->file('imagen')->store('public/img');
+            $url=Storage::url($imagen);
+            $user->imagen=$url;
+            }
+           $user->imagen='/storage/img/usuario.png';
+           $user->persona_id=$request->cajeros;
+           $user->save();
+           $role=Role::findOrFail($request->role_id);
+           $user->assignRole($role->name);
+           return redirect()->back()->with('usuario ya creado');
+
+
+
     }
 
     /**
@@ -74,7 +110,18 @@ class UsuarioController extends Controller
      */
     public function show($id)
     {
+           //////////bitacora////////
+           $id=auth()->user()->persona_id;
+           $persona=persona::findOrFail($id);
+           $bitacora=new bitacora();
+           $bitacora->usuario=$persona->nombre;
+           $bitacora->tabla='show de user';
+           $bitacora->descripcion='el usuario'. $persona->nombre.'ingreso a las '.date("Y-m-d H:i:s");;
+           $bitacora->user_id=auth()->user()->id;
+           $bitacora->save();
+           ////////////////
         $persona=Persona::findOrFail($id);
+
         return view('usuario.show',['persona'=>$persona]);
     }
 
@@ -99,22 +146,30 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
+           //////////bitacora////////
+           $id=auth()->user()->persona_id;
+           $persona=persona::findOrFail($id);
+           $bitacora=new bitacora();
+           $bitacora->usuario=$persona->nombre;
+           $bitacora->tabla='edit de user';
+           $bitacora->descripcion='el usuario'. $persona->nombre.'ingreso a las '.date("Y-m-d H:i:s");;
+           $bitacora->user_id=auth()->user()->id;
+           $bitacora->save();
+           ////////////////
         $persona=Persona::findOrFail($id);
-        $persona->nombre=$request->input('nombre');
-        $persona->paterno=$request->input('paterno');
-        $persona->materno=$request->input('materno');
-        $persona->telefono=$request->input('telefono');
-        $persona->correo=$request->input('correo');
-        $persona->fecha_nacimiento=$request->input('fecha_nacimietno');
-        $persona->estado_civil=$request->input('estado_civil');
-        $persona->sexo=$request->input('sexo');
-        $persona->carnet_identidad=$request->input('carnet_identidad');
-        $persona->direccion=$request->input('direccion');
-        $persona->save();
-
         $user=$persona->user;
         $user->name=$request->input('nombre');
         $user->email=$request->input('correo');
+        if($request->hasFile('imagen')) {
+            if($user->imagen!='/storage/img/usuario.png'){
+                $url=str_replace('/storage','/public',$user->imagen);
+                Storage::delete($url);
+            }
+
+            $imagen=$request->file('imagen')->store('public/img');
+            $url=Storage::url($imagen);
+            $user->imagen=$url;
+        }
         $user->password=bcrypt($request->input('contraseña'));
         $user->save();
 

@@ -13,7 +13,8 @@
     <div>
         <label for="{{$permission->id}}">
             {!! Form::checkbox('permissions[]',$permission->id,null,['class'=>'mr-l','id'=>$permission->id]) !!}
-            {{ $permission->description }}
+            {{ $permission->name}}
         </label>
+        <br>
     </div>
 @endforeach

@@ -33,11 +33,12 @@
                     Nueva reserva
                  </li>
 	             </ul><br>
-	             <form method="POST" action="{{ route('reservas.store') }}">
+	             <form method="POST" action="{{ route('reservas.store',[$personas->id]) }}" >
                        @csrf
+
                     <div class="row">
                         <div class="input-field col s12 m4">
-                            <input id="fecha" type="date" class="validate" name="fecha" value="{{old('fecha')}}">
+                            <input id="fecha" type="date" class="validate" name="fecha" value="{{old('fecha')}}" required>
                             <label for="fecha">FECHA A RESERVAR:</label>
                             <br>
                             @error('fecha')
@@ -46,7 +47,7 @@
                         </div>
 
                         <div class="input-field col s12 m4">
-                            <input id="hora"type="time"  step="0" class="validate" name="hora" value="{{old('hora')}}">
+                            <input id="hora"type="time"  step="0" class="validate" name="hora" value="{{old('hora')}}" required>
                             <label for="hora">hora :</label>
                             <br>
                             @error('hora')
@@ -56,7 +57,7 @@
 
 
                         <div class="input-field col s12 m4">
-                            <input id="cantidad" type="number" class="validate" name="cantidad" value="{{old('cantidad')}}">
+                            <input id="cantidad" type="number" class="validate" name="cantidad" value="{{old('cantidad')}}" required>
                             <label for="cantidad">cantidad:</label>
                             <br>
                             @error('cantidad')

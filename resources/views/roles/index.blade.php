@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
+
 <div class="container">
     <div>
     <a href="{{ route('roles.create') }}" class="btn btn-secondary btn-sm float-right">Nuevo rol</a>

@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\cajero;
-use App\Models\Persona;
 use Illuminate\Http\Request;
 use App\Models\User;
-class cajeroController extends Controller
+use App\Models\persona;
+use App\Models\cajero;
+use App\Models\bitacora;
+class cajerocontroller extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
+          //////////bitacora////////
+          $id=auth()->user()->persona_id;
+          $persona=persona::findOrFail($id);
+          $bitacora=new bitacora();
+          $bitacora->usuario=$persona->nombre;
+          $bitacora->tabla='index de cajero';
+          $bitacora->descripcion='el usuario'. $persona->nombre.'ingreso a las '.date("Y-m-d H:i:s");;
+          $bitacora->user_id=auth()->user()->id;
+          $bitacora->save();
+        ////////////////
         $cajeros_id=cajero::all('persona_id');
         $personas=Persona::with('cajero')->whereIn('id',$cajeros_id)->get();
 
@@ -39,10 +45,21 @@ class cajeroController extends Controller
      */
     public function store(Request $request)
     {
+
+             //////////bitacora////////
+             $id=auth()->user()->persona_id;
+             $persona=persona::findOrFail($id);
+             $bitacora=new bitacora();
+             $bitacora->usuario=$persona->nombre;
+             $bitacora->tabla='crear de cajero';
+             $bitacora->descripcion='el usuario'. $persona->nombre.'ingreso a las '.date("Y-m-d H:i:s");;
+             $bitacora->user_id=auth()->user()->id;
+             $bitacora->save();
+           ////////////////
         $request->validate([
             'nombre'=>'required',
             'Apellido'=>'required',
-            'Correo'=>'required',
+
             'fecha_nacimiento'=>'required',
             'carnet_identidad'=>'required',
             'profesion'=>'required',
@@ -50,9 +67,9 @@ class cajeroController extends Controller
         $persona=new Persona();
         $persona->nombre=$request->input('nombre');
         $persona->apellido=$request->input('Apellido');
-        $persona->correo=$request->input('Correo');
+
         $persona->fecha_nacimiento=$request->input('fecha_nacimiento');
-        $persona->direccion=$request->input('direccion');
+
         $persona->save();
 
 
@@ -61,15 +78,9 @@ class cajeroController extends Controller
         $cajero->carnet_identidad=$request->input('carnet_identidad');
         $cajero->persona_id=$persona->id;
         $cajero->save();
+        return redirect()->back()->with('status','cajero ya creado');
 
-        $user=new User();
-        $user->name=$persona->nombre;
-        $user->email=$persona->correo;
-        $user->password=bcrypt(12345678);
-        $user->persona_id=$persona->id;
-        $user->save();
 
-        return redirect()->route('cajeros.index');
     }
 
     /**
@@ -80,6 +91,16 @@ class cajeroController extends Controller
      */
     public function show($id)
     {
+          //////////bitacora////////
+          $id=auth()->user()->persona_id;
+          $persona=persona::findOrFail($id);
+          $bitacora=new bitacora();
+          $bitacora->usuario=$persona->nombre;
+          $bitacora->tabla='show de cajero';
+          $bitacora->descripcion='el usuario'. $persona->nombre.'ingreso a las '.date("Y-m-d H:i:s");;
+          $bitacora->user_id=auth()->user()->id;
+          $bitacora->save();
+        ////////////////
         $persona=Persona::findOrFail($id);
         return view('cajero.show',['persona'=>$persona]);
     }
@@ -105,10 +126,19 @@ class cajeroController extends Controller
      */
     public function update(Request $request, $id)
     {
+          //////////bitacora////////
+          $id=auth()->user()->persona_id;
+          $persona=persona::findOrFail($id);
+          $bitacora=new bitacora();
+          $bitacora->usuario=$persona->nombre;
+          $bitacora->tabla='edit de cajero';
+          $bitacora->descripcion='el usuario'. $persona->nombre.'ingreso a las '.date("Y-m-d H:i:s");;
+          $bitacora->user_id=auth()->user()->id;
+          $bitacora->save();
+        ////////////////
         $request->validate([
             'nombre'=>'required',
             'Apellido'=>'required',
-            'Correo'=>'required',
             'fecha_nacimiento'=>'required',
             'carnet_identidad'=>'required',
             'profesion'=>'required',
@@ -116,17 +146,13 @@ class cajeroController extends Controller
         $persona=Persona::findOrFail($id);
         $persona->nombre=$request->input('nombre');
         $persona->apellido=$request->input('Apellido');
-
-        $persona->correo=$request->input('Correo');
         $persona->fecha_nacimiento=$request->input('fecha_nacimiento');
-
-        $persona->direccion=$request->input('direccion');
         $persona->save();
 
         $cajero=$persona->cajero;
         $cajero->profesion=$request->input('profesion');
         $cajero->carnet_identidad=$request->input('carnet_identidad');
-        return redirect()->route('cajeros.index');
+        return redirect()->back()->with('status','cajero ya actualizado');
     }
 
     /**

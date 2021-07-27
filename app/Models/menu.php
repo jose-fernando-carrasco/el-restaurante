@@ -9,8 +9,12 @@ class menu extends Model
 {
     use HasFactory;
     protected $table='menu';
-    protected $fillable=['nombre','fecha'];
-    public function producto(){
-        return $this->belongsToMany(producto::class);
+
+    protected $fillable=['fecha','nombre','admin_id'];
+    public function alimentos(){
+        return $this->belongsToMany(alimento::class);
+    }
+    public function administrador(){
+      return  $this->belongsTo(administrador::class);
     }
 }

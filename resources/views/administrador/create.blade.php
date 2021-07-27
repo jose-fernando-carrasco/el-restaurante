@@ -1,6 +1,15 @@
 @extends('layouts.app')
 @section('content')
 <div class="container py-3">
+    @if (session('status'))
+
+    <div class="alert alert-Success d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+        <div>
+            <h6 >{{session('status')}}</h6>
+        </div>
+      </div>
+    @endif
     <div class="row">
         <div class="mx-auto col-sm-6">
             <!-- form user info -->
@@ -33,7 +42,7 @@
                             @enderror
                         </div>
                         <div class="form-group row">
-                            <label class="col-lg-3 col-form-label form-control-label">Correo administrador</label>
+                            <label class="col-lg-3 col-form-label form-control-label">Correo Cliente</label>
                             <div class="col-lg-9">
                                 <input class="form-control" id="Correo" type="email" class="validate" name="Correo" value="{{old('Correo')}}" required>
                             </div>
@@ -52,7 +61,16 @@
                             <span style="color:red">{{ $message }} </span>
                             @enderror
                         </div>
-
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">imagen del producto</label>
+                            <div class="col-lg-9">
+                                <input class="form-control" id="imagen" type="file" class="validate" name="imagen" value="{{old('imagen')}}">
+                            </div>
+                            <br>
+                            @error('imagen')
+                            <span style="color:red">{{ $message }} </span>
+                            @enderror
+                        </div>
                         <div class="form-group row">
                             <label class="col-lg-3 col-form-label form-control-label">profesion administrador</label>
                             <div class="col-lg-9">

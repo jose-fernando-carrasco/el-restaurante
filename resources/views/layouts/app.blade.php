@@ -10,9 +10,9 @@
     </head>
 
     <body>
-        @include('sweetalert::alert')
 
-  
+
+
         @include('layouts.header')
 
         <main class="primary-background">

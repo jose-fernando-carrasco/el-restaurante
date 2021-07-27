@@ -11,8 +11,8 @@
         {!! Form::model($role,['route'=>['roles.update',$role],'method'=>'put']) !!}
 
         @include('roles.partials._form')
-
-        {!! Form::submit('Actualizar rol',['class'=>'btn btn-primary']) !!}
+        <br>
+         {!! Form::submit('Actualizar rol',['class'=>'btn btn-primary']) !!}
         {!! Form::close() !!}
     </div>
 </div>

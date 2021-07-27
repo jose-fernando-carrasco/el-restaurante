@@ -20,6 +20,23 @@
               MENU DEL RESTAURANTE
             </a>
           </li>
+
+
+          <li>
+            <a href="{{ route('reservas.index') }}" class="nav-link link-dark">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+              Gestionar reserva
+            </a>
+          </li>
+
+          <li>
+            <a href="{{ route('pedidos.index') }}" class="nav-link link-dark">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+              Gestionar pedidos
+            </a>
+          </li>
+
+@role('administrador')
           <li>
             <i class="bi bi-card-list"></i>
             <a href="{{ route('usuarios.index') }}" class="nav-link link-dark">
@@ -46,18 +63,61 @@
               Gestionar Administradores
             </a>
           </li>
+
+
           <li>
-            <a href="{{ route('reservas.index') }}" class="nav-link link-dark">
+            <a href="{{ route('menus.index') }}" class="nav-link link-dark">
               <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
-              Gestionar reserva
+              Gestionar menu
             </a>
           </li>
           <li>
-            <a href="{{ route('productos.index') }}" class="nav-link link-dark">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="#"/></svg>
-              Gestionar productos
+            <a href="{{ route('alimentos.index') }}" class="nav-link link-dark">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+              Gestionar alimentos
             </a>
           </li>
+
+          <li>
+            <i class="bi bi-card-list"></i>
+            <a href="{{ route('roles.index') }}" class="nav-link link-dark">
+
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#"/></svg>
+              Gestionar roles
+            </a>
+          </li>
+          <li>
+            <i class="bi bi-card-list"></i>
+            <a href="{{ route('bitacoras.index') }}" class="nav-link link-dark">
+
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#"/></svg>
+              Bitacora
+            </a>
+          </li>
+          @endrole
+@role('cajero')
+<li>
+    <i class="bi bi-card-list"></i>
+    <a href="{{ route('usuarios.index') }}" class="nav-link link-dark">
+
+      <svg class="bi me-2" width="16" height="16"><use xlink:href="#"/></svg>
+      Gestionar Usuarios
+    </a>
+  </li>
+  <li>
+    <a href="{{ route('clientes.index') }}" class="nav-link link-dark">
+      <svg class="bi me-2" width="16" height="16"><use xlink:href="#"/></svg>
+      Gestionar CLIENTES
+    </a>
+  </li>
+   <li>
+    <a href="{{ route('alimentos.index') }}" class="nav-link link-dark">
+      <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+      Gestionar alimentos
+    </a>
+  </li>
+
+@endrole
         </div>
       </div>
 

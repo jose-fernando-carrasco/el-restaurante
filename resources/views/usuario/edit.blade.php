@@ -1,92 +1,88 @@
 @extends('layouts.app')
 @section('content')
-
+<div class="container py-3">
     <div class="row">
-        <form method="POST" action="{{ route('usuarios.update', [$persona->id]) }}">
-            @csrf
-            @method('PUT')
 
-            <div class="col s12 m10 offset-m1 l6 offset-l3 xl6 offset-xl3">
-                <div id="panel-left" class="card">
 
-                    <div class="card-content">
-                        <span class="card-title primary-text-color primary-text-style">
-                            Formulario de Edición
-                            </span>
-                        <div class="row">
-                            <div class="col s12 divider"></div>
+        <div class="mx-auto col-sm-6">
+            <!-- form user info -->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Editar Producto</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" action="{{ route('usuarios.update', [$persona->id]) }}">
+                        @csrf
+                        @method('PUT')
+
+
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">Username</label>
+                            <div class="col-lg-9">
+                                <input class="form-control" id="nombre" type="text" class="validate" name="nombre" value="{{$persona->user->name}}" required>
+                            </div>
+                            <br>
+                            @error('nombre')
+                            <span style="color:red">{{ $message }} </span>
+                            @enderror
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">correo</label>
+                            <div class="col-lg-9">
+                                <input class="form-control" id="correo" type="email" class="validate" name="correo" value="{{$persona->user->email}}" required>
+                            </div>
+                            <br>
+                            @error('correo')
+                            <span style="color:red">{{ $message }} </span>
+                            @enderror
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">imagen del usuario</label>
+                            <div class="col-lg-9">
+                                <img  id="imagen" src="{{asset($persona->user->imagen)}}" width="100px" height="100px">
+                            </div>
+                            <br>
+                            @error('imagen')
+                            <span style="color:red">{{ $message }} </span>
+                            @enderror
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">imagen del producto</label>
+                            <div class="col-lg-9">
+                                <input class="form-control" id="imagen" type="file" class="validate" name="imagen" value="{{old('imagen')}}">
+                            </div>
+                            <br>
+                            @error('imagen')
+                            <span style="color:red">{{ $message }} </span>
+                            @enderror
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">password</label>
+                            <div class="col-lg-9">
+                                <input class="form-control" id="password" type="password" class="validate" name="password" value="{{$persona->user->password}}" required>
+                            </div>
+                            <br>
+                            @error('password')
+                            <span style="color:red">{{ $message }} </span>
+                            @enderror
                         </div>
 
-                        <div class="row">
-                            <div class="input-field col s12 m4">
-                                <input id="nombre" type="text" class="validate" name="nombre" value="{{$persona->nombre}}">
-                                <label for="nombre">Nombre Completo:</label>
-                                @error('nombre')
-                                    <span class="help-block red-text"> {{ $message }} </span>
-                                @enderror
-                            </div>
-
-                            <div class="input-field col s12 m4">
-                                <input id="apellido" type="text" class="validate" name="apellido" value="{{$persona->apellido}}">
-                                <label for="apellido">Apellido:</label>
-                                @error('apellido')
-                                <span class="help-block red-text"> {{ $message }} </span>
-                                @enderror
-                            </div>
-
-
-
-
-                            <div class="input-field col s8">
-                                <input id="correo" type="email" class="validate" name="correo" value="{{$persona->correo}}">
-                                <label for="correo">Correo:</label>
-                                @error('correo')
-                                <span class="help-block red-text"> {{ $message }} </span>
-                                @enderror
-                            </div>
-
-
-                            <div class="input-field col s12 m4">
-                                <input id="fecha_nacimiento" type="text" class="datepicker" name="fecha_nacimiento" value="{{$persona->fecha_nacimiento}}">
-                                <label for="fecha_nacimiento">Fecha de nacimiento:</label>
-                                @error('fecha_nacimiento')
-                                <span class="help-block red-text"> {{ $message }} </span>
-                                @enderror
-                            </div>
-
-                            <div class="input-field col s12 ">
-                                <textarea id="direccion" class="validate materialize-textarea" name="direccion">{{$persona->direccion}}</textarea>
-                                <label for="direccion">Dirección:</label>
-                                @error('direccion')
-                                <span class="help-block red-text"> {{ $message }} </span>
-                                @enderror
-                            </div>
-
-                        
-
-                            <div class="input-field col s12 m6">
-                                <input id="password" type="password" class="validate" name="password">
-                                <label for="password">Contraseña:</label>
-                                @error('password')
-                                <span class="help-block red-text"> {{ $message }} </span>
-                                @enderror
-                            </div>
-                            <div class="input-field col s12 m6">
-                                <input id="password_confirmation" type="password" class="validate" name="password_confirmation">
-                                <label for="password_confirmation">Repetir Contraseña:</label>
-
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label"></label>
+                            <div class="col-lg-9">
+                                <input type="submit" class="btn btn-primary"  onclick="showProgress()" value="Registrar">
+                                <input type="reset" class="btn btn-secondary" value="Limpar">
                             </div>
                         </div>
-                        <div class="card-action right-align">
-                            <button type="submit" class="waves-effect waves-brown btn-flat red-text bold" onclick="showProgress()">Guardar</button>
-                        </div>
-                    </div>
+                    </form>
+
+                    <a href="{{ route('usuarios.index') }}" class="btn btn-primary">Atras</a>
 
                 </div>
             </div>
-
-        </form>
+            <!-- /form user info -->
+        </div>
     </div>
-
+</div>
 
 @endsection

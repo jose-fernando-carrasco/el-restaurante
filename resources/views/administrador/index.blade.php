@@ -3,12 +3,7 @@
 @section('content')
 
 <div class="container">
-    <div class="col-md-6">
-      <div class="btn-group">
 
-
-      </div>
-    </div>
   <br>
   <div class="row">
       <div class="col-md-12">
@@ -32,7 +27,7 @@
                         <th>Nombre</th>
                         <th>apellido</th>
 
-                        <th>Correo</th>
+
                         <th>Fecha de nacimiento</th>
 
                         <th>profesion</th>
@@ -49,7 +44,7 @@
                                 <td>{{ $persona->nombre }}</td>
                                 <td>{{ $persona->apellido }}</td>
 
-                                <td>{{ $persona->correo }}</td>
+
                                 <td>{{ $persona->fecha_nacimiento }}</td>
 
                                 <td>{{ $persona->administrador->profesion }}</td>

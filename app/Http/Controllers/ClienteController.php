@@ -2,20 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\cliente;
-use App\Models\Persona;
 use Illuminate\Http\Request;
 use App\Models\User;
-
-class ClienteController extends Controller
+use App\Models\persona;
+use App\Models\bitacora;
+use App\Models\cliente;
+use Illuminate\Support\Facades\Storage;
+class clientecontroller extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
+
+          //////////bitacora////////
+          $id=auth()->user()->persona_id;
+          $persona=persona::findOrFail($id);
+          $bitacora=new bitacora();
+          $bitacora->usuario=$persona->nombre;
+          $bitacora->tabla='index de cliente';
+          $bitacora->descripcion='el usuario'. $persona->nombre.'ingreso a las '.date("Y-m-d H:i:s");;
+          $bitacora->user_id=auth()->user()->id;
+          $bitacora->save();
+        ////////////////
         $clientes_id=cliente::all('persona_id');
         $personas=Persona::with('cliente')->whereIn('id',$clientes_id)->get();
 
@@ -48,30 +55,46 @@ class ClienteController extends Controller
             'Correo'=>'required',
             'fecha_nacimiento'=>'required',
             'carnet_identidad'=>'required',
+            'contraseña'=>'required'
            ]);
-
+  //////////bitacora////////
+  $id=auth()->user()->persona_id;
+  $persona=persona::findOrFail($id);
+  $bitacora=new bitacora();
+  $bitacora->usuario=$persona->nombre;
+  $bitacora->tabla='crear de cliente';
+  $bitacora->descripcion='el usuario'. $persona->nombre.'ingreso a las '.date("Y-m-d H:i:s");;
+  $bitacora->user_id=auth()->user()->id;
+  $bitacora->save();
+////////////////
         $persona=new Persona();
         $persona->nombre=$request->input('nombre');
         $persona->apellido=$request->input('Apellido');
-        $persona->correo=$request->input('Correo');
         $persona->fecha_nacimiento=$request->input('fecha_nacimiento');
-
         $persona->save();
 
         $cliente=new cliente();
         $cliente->carnet_identidad=$request->input('carnet_identidad');
-
         $cliente->persona_id=$persona->id;
         $cliente->save();
 
         $user=new User();
         $user->name=$persona->nombre;
-        $user->email=$persona->correo;
-        $user->password=bcrypt(12345678);
+        $user->email=$request->input('Correo');
+        $user->password=bcrypt($request->input('contraseña'));
+        if($request->hasFile('imagen')) {
+            $imagen=$request->file('imagen')->store('public/img');
+            $url=Storage::url($imagen);
+            $user->imagen=$url;
+            }
+            else{
+                $user->imagen='/storage/img/usuario.png';
+               }
         $user->persona_id=$persona->id;
         $user->save();
+        $user->assignRole('cliente');
 
-        return redirect()->route('clientes.index');
+        return redirect()->back()->with('status','cliente cuenta ya creada');
     }
 
     /**
@@ -82,6 +105,16 @@ class ClienteController extends Controller
      */
     public function show($id)
     {
+          //////////bitacora////////
+          $id=auth()->user()->persona_id;
+          $persona=persona::findOrFail($id);
+          $bitacora=new bitacora();
+          $bitacora->usuario=$persona->nombre;
+          $bitacora->tabla='show de cliente';
+          $bitacora->descripcion='el usuario'. $persona->nombre.'ingreso a las '.date("Y-m-d H:i:s");;
+          $bitacora->user_id=auth()->user()->id;
+          $bitacora->save();
+        ////////////////
         $persona=Persona::findOrFail($id);
         return view('cliente.show',['persona'=>$persona]);
     }
@@ -116,20 +149,25 @@ class ClienteController extends Controller
             'fecha_nacimiento'=>'required',
             'carnet_identidad'=>'required',
            ]);
-         
+  //////////bitacora////////
+  $id=auth()->user()->persona_id;
+  $persona=persona::findOrFail($id);
+  $bitacora=new bitacora();
+  $bitacora->usuario=$persona->nombre;
+  $bitacora->tabla='edit de cliente';
+  $bitacora->descripcion='el usuario'. $persona->nombre.'ingreso a las '.date("Y-m-d H:i:s");;
+  $bitacora->user_id=auth()->user()->id;
+  $bitacora->save();
+////////////////
         $persona=Persona::findOrFail($id);
         $persona->nombre=$request->input('nombre');
         $persona->apellido=$request->input('Apellido');
-
         $persona->correo=$request->input('Correo');
         $persona->fecha_nacimiento=$request->input('fecha_nacimiento');
-
-
         $persona->save();
 
         $cliente=$persona->cliente;
         $cliente->carnet_identidad=$request->input('carnet_identidad');
-
         $cliente->save();
 
         return redirect()->route('clientes.index');
