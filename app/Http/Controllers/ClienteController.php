@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\user;
 use App\Models\persona;
 use App\Models\bitacora;
 use App\Models\cliente;
@@ -24,7 +24,7 @@ class clientecontroller extends Controller
           $bitacora->save();
         ////////////////
         $clientes_id=cliente::all('persona_id');
-        $personas=Persona::with('cliente')->whereIn('id',$clientes_id)->get();
+        $personas=persona::with('cliente')->whereIn('id',$clientes_id)->get();
 
         return view('cliente.index',['personas'=>$personas]);
 
@@ -67,7 +67,7 @@ class clientecontroller extends Controller
   $bitacora->user_id=auth()->user()->id;
   $bitacora->save();
 ////////////////
-        $persona=new Persona();
+        $persona=new persona();
         $persona->nombre=$request->input('nombre');
         $persona->apellido=$request->input('Apellido');
         $persona->fecha_nacimiento=$request->input('fecha_nacimiento');
@@ -78,7 +78,7 @@ class clientecontroller extends Controller
         $cliente->persona_id=$persona->id;
         $cliente->save();
 
-        $user=new User();
+        $user=new user();
         $user->name=$persona->nombre;
         $user->email=$request->input('Correo');
         $user->password=bcrypt($request->input('contraseña'));
@@ -115,7 +115,7 @@ class clientecontroller extends Controller
           $bitacora->user_id=auth()->user()->id;
           $bitacora->save();
         ////////////////
-        $persona=Persona::findOrFail($id);
+        $persona=persona::findOrFail($id);
         return view('cliente.show',['persona'=>$persona]);
     }
 
@@ -127,7 +127,7 @@ class clientecontroller extends Controller
      */
     public function edit($id)
     {
-        $persona=Persona::findOrFail($id);
+        $persona=persona::findOrFail($id);
         return view('cliente.edit',['persona'=>$persona]);
 
 
@@ -159,7 +159,7 @@ class clientecontroller extends Controller
   $bitacora->user_id=auth()->user()->id;
   $bitacora->save();
 ////////////////
-        $persona=Persona::findOrFail($id);
+        $persona=persona::findOrFail($id);
         $persona->nombre=$request->input('nombre');
         $persona->apellido=$request->input('Apellido');
         $persona->correo=$request->input('Correo');
@@ -181,7 +181,7 @@ class clientecontroller extends Controller
      */
     public function destroy($id)
     {
-        $persona=Persona::findOrFail($id);
+        $persona=persona::findOrFail($id);
         $persona->delete();
         return redirect()->route('clientes.index');
     }

@@ -50,7 +50,7 @@ class UsuarioController extends Controller
     public function create()
     {
         $roles=Role::pluck('name', 'id');
-        $user=User::all('persona_id');
+        $user=user::all('persona_id');
         $cajeros=cajero::all('persona_id');
         $cajeros_id=persona::whereIn('id',$cajeros)->whereNotIn('id',$user)->get();
          return view('usuario.create',['roles'=>$roles],['cajeros'=>$cajeros_id]);
@@ -120,7 +120,7 @@ class UsuarioController extends Controller
            $bitacora->user_id=auth()->user()->id;
            $bitacora->save();
            ////////////////
-        $persona=Persona::findOrFail($id);
+        $persona=persona::findOrFail($id);
 
         return view('usuario.show',['persona'=>$persona]);
     }
@@ -133,7 +133,7 @@ class UsuarioController extends Controller
      */
     public function edit($id)
     {
-        $persona=Persona::findOrFail($id);
+        $persona=persona::findOrFail($id);
         return view('usuario.edit',['persona'=>$persona]);
     }
 
@@ -156,7 +156,7 @@ class UsuarioController extends Controller
            $bitacora->user_id=auth()->user()->id;
            $bitacora->save();
            ////////////////
-        $persona=Persona::findOrFail($id);
+        $persona=persona::findOrFail($id);
         $user=$persona->user;
         $user->name=$request->input('nombre');
         $user->email=$request->input('correo');
@@ -184,7 +184,7 @@ class UsuarioController extends Controller
      */
     public function destroy($id)
     {
-        $persona=Persona::findOrFail($id);
+        $persona=persona::findOrFail($id);
         $persona->delete();
         return redirect()->route('usuarios.index');
     }

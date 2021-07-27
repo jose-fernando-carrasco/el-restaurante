@@ -22,7 +22,7 @@ class cajerocontroller extends Controller
           $bitacora->save();
         ////////////////
         $cajeros_id=cajero::all('persona_id');
-        $personas=Persona::with('cajero')->whereIn('id',$cajeros_id)->get();
+        $personas=persona::with('cajero')->whereIn('id',$cajeros_id)->get();
 
         return view('cajero.index',['personas'=>$personas]);
     }
@@ -64,7 +64,7 @@ class cajerocontroller extends Controller
             'carnet_identidad'=>'required',
             'profesion'=>'required',
            ]);
-        $persona=new Persona();
+        $persona=new persona();
         $persona->nombre=$request->input('nombre');
         $persona->apellido=$request->input('Apellido');
 
@@ -101,7 +101,7 @@ class cajerocontroller extends Controller
           $bitacora->user_id=auth()->user()->id;
           $bitacora->save();
         ////////////////
-        $persona=Persona::findOrFail($id);
+        $persona=persona::findOrFail($id);
         return view('cajero.show',['persona'=>$persona]);
     }
 
@@ -113,7 +113,7 @@ class cajerocontroller extends Controller
      */
     public function edit($id)
     {
-        $persona=Persona::findOrFail($id);
+        $persona=persona::findOrFail($id);
         return view('cajero.edit',['persona'=>$persona]);
     }
 
@@ -143,7 +143,7 @@ class cajerocontroller extends Controller
             'carnet_identidad'=>'required',
             'profesion'=>'required',
            ]);
-        $persona=Persona::findOrFail($id);
+        $persona=persona::findOrFail($id);
         $persona->nombre=$request->input('nombre');
         $persona->apellido=$request->input('Apellido');
         $persona->fecha_nacimiento=$request->input('fecha_nacimiento');
@@ -163,7 +163,7 @@ class cajerocontroller extends Controller
      */
     public function destroy($id)
     {
-        $persona=Persona::findOrFail($id);
+        $persona=persona::findOrFail($id);
         $persona->delete();
         return redirect()->route('cajeros.index');
     }

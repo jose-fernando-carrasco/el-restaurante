@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\administrador;
 use App\Models\persona;
 use App\Models\bitacora;
-use App\Models\User;
+use App\Models\user;
 use Illuminate\Support\Facades\Storage;
 class administradorcontroller extends Controller
 {
@@ -82,7 +82,7 @@ class administradorcontroller extends Controller
         $administrador->persona_id=$persona->id;
         $administrador->save();
 
-        $user=new User();
+        $user=new user();
         $user->name=$persona->nombre;
         $user->email=$request->input('Correo');
         $user->password=bcrypt(12345678);
